@@ -6,11 +6,11 @@ info:
   contact:
     email: ahadcse@gmail.com
 host: sample-domain.com
-basePath: "/s3op"
+basePath: "/testapp"
 schemes:
 - https
 paths:
-  "/readfile/{formId}":
+  "/reads3/{formId}":
     get:
       summary: 'Get S3 Info'
       produces:
@@ -35,8 +35,6 @@ paths:
           description: "400 response"
           schema:
             $ref: "#/definitions/ErrorMessage"
-      security:
-      - api_key: []
       x-amazon-apigateway-integration:
         responses:
           default:
@@ -75,7 +73,7 @@ paths:
         passthroughBehavior: "when_no_match"
         type: "mock"
 
-  "/writefile/events":
+  "/writes3/events":
     post:
       summary: 'Puts feedback/s into S3'
       produces:
@@ -130,8 +128,6 @@ paths:
               type: string
             Access-Control-Allow-Headers:
               type: string
-      security:
-      - api_key: []
       x-amazon-apigateway-integration:
         responses:
           '4\d{2}':
@@ -160,11 +156,38 @@ paths:
         httpMethod: POST
         type: aws_proxy
 
-securityDefinitions:
-  api_key:
-    type: apiKey
-    name: api-key
-    in: header
+  /gql:
+    post:
+      tags:
+        - graphql
+        - query
+      description: |
+        Client Adapter for backend api-schemas
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: query
+          required: true
+          schema:
+            $ref: '#/definitions/GraphQLQuery'
+      responses:
+        '200':
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/GraphQLResponse'
+        '400':
+          description: bad input parameter
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: '200'
+        uri: 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/@lambda:gql@/invocations'
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
 definitions:
   Response:
     type: "object"
@@ -178,3 +201,7 @@ definitions:
     properties:
       rootCause:
         type: "string"
+  GraphQLQuery:
+    type: object
+  GraphQLResponse:
+    type: object
