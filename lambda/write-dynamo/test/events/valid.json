@@ -1,0 +1,4 @@
+{
+  "body" : "{    \"id\": \"testId\",   \"field0\": \"Value\",  \"field1\": \"abc\",    \"field2\": \"Value2\",    \"antoherField\": \"valueNew\"}"
+
+}

@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.6.7",
+    "bluebird": "^3.4.6",
+    "bunyan": "^1.8.1",
+    "bunyan-format": "^0.2.1",
+    "dtrace-provider": "^0.8.2",
+    "uuid": "^3.0.1",
+    "is-valid-json": "*"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-http": "^1.0.0",
+    "events": "*",
+    "mocha": "*",
+    "should": ">= 0.0.1",
+    "traverse": "^0.6.6",
+    "lambda-local": "^1.4",
+    "chai-as-promised": "^1.0.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha"
+  }
+}

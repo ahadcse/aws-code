@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.1.42",
+    "bluebird": "^3.5.0",
+    "bunyan": "^1.8.1",
+    "bunyan-format": "^0.2.1"
+  },
+  "devDependencies": {
+    "bunyan": "^1.8.1",
+    "chai": "*",
+    "events": "*",
+    "mocha": "*",
+    "should": ">= 0.0.1",
+    "sinon": "*",
+    "traverse": "^0.6.6",
+    "lambda-local": "^1.4.2",
+    "chai-as-promised": "^1.0.0",
+    "rewire": "*",
+    "mute": "*"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha"
+  }
+}
