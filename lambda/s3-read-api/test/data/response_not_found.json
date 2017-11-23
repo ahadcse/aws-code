@@ -4,7 +4,7 @@
     "Content-type": "application/json",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "*",
-    "Access-Control-Allow-Headers": "Content-Type, authorization-token,api-key,request-token"
+    "Access-Control-Allow-Headers": "Content-Type,Authorization,Api-Key"
   },
   "statusCode": 404
 }

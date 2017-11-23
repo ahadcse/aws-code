@@ -75,7 +75,7 @@ paths:
 
   "/writes3/events":
     post:
-      summary: 'Puts feedback/s into S3'
+      summary: 'Puts formId/s into S3'
       produces:
         - application/json
       parameters:
@@ -184,10 +184,11 @@ paths:
         responses:
           default:
             statusCode: '200'
-        uri: 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/@lambda:gql@/invocations'
+        uri: 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/@lambda:gql-api@/invocations'
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
+
 definitions:
   Response:
     type: "object"

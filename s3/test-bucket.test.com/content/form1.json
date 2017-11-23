@@ -1,0 +1,57 @@
+{
+  "formId": "form1",
+  "default_language": "en",
+  "en": {
+    "questions": [
+      {
+        "question": "do you like ice cream?",
+        "answers": [
+          0,
+          1
+        ]
+      },
+      {
+        "question": "do you like spinach?",
+        "answers": [
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "se": {
+    "questions": [
+      {
+        "question": "tyker du om glass?",
+        "answers": [
+          0,
+          10,
+          20
+        ]
+      },
+      {
+        "question": "tycker du om spenat?",
+        "answers": [
+          0,
+          10,
+          20
+        ]
+      }
+    ]
+  },
+  "result": [
+    {
+      "name": "Normal",
+      "value": "10"
+    },
+    {
+      "name": "Good",
+      "value": "15"
+    },
+    {
+      "name": "Bad",
+      "value": "31"
+    }
+  ],
+  "submittedTime": "2017-02-06T21:19+02:00"
+}
