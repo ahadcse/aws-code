@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Cloudwatch alarm definitions. This is the definition of a simple cloudwatch alarm. 
+             As a action of the alarm (defined at the last of the template) it will sent to sns
+
+Parameters:
+  Environment:
+    Type: String
+  Service:
+    Type: String
+
+Resources:
+
+  SampleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: "Alarm if queue depth grows beyond 0 messages"
+      Namespace: "AWS/SQS"
+      MetricName: ApproximateNumberOfMessagesVisible
+      ActionsEnabled: true
+      Dimensions:
+        - Name: QueueName
+          Value : sqs-name
+      Statistic: Minimum
+      Period: 60
+      Unit: Count
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:sns-name
+      InsufficientDataActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:sns-name
