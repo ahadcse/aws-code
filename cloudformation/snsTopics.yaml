@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Cloudwatch alarm topics definitions
+
+Parameters:
+  Environment:
+    Type: String
+  Service:
+    Type: String
+
+Resources:
+  AlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${Service}-${Environment}-alarm-topic-name
+
+  SupportEmailSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: ahadcse@live.com
+      Protocol: email
+      TopicArn: !Ref AlarmTopic
