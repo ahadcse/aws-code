@@ -27,6 +27,6 @@ Resources:
       Threshold: 0
       ComparisonOperator: GreaterThanThreshold
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:sns-name
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${Service}-${Environment}-alarm-topic-name
       InsufficientDataActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:sns-name
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${Service}-${Environment}-alarm-topic-name
