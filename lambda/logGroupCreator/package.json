@@ -1,0 +1,8 @@
+{
+  "name": "logGroupCreator",
+  "main": "index.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}

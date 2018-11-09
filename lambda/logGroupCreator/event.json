@@ -1,0 +1,6 @@
+{
+  "logGroupName": "/aws/lambda/test-log-group",
+  "destinationArn": "arn:aws:logs:aws-region:aws-account-id:destination:overwatch-v1",
+  "filterName": "test-filter",
+  "filterPattern": "[time, uuid, app=overwatch*, data]"
+}

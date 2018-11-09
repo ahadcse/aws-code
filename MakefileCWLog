@@ -1,0 +1,48 @@
+ENVIRONMENT        ?= dev
+SERVICE ?= custom-loggroup
+AWS_REGION ?= eu-west-1
+BUCKET_NAME = dw-artifactory-$(ENVIRONMENT)
+BUCKET_PREFIX = $(SERVICE)
+
+TAGS = Owner=team_name Environment=$(ENVIRONMENT) Service=$(SERVICE)
+
+package = aws cloudformation package \
+    --template-file cloudformation/cwLogGroup.yml \
+    --output-template-file dist/cwLogGroup.yml \
+    --s3-bucket $(BUCKET_NAME) \
+    --s3-prefix $(BUCKET_PREFIX)
+
+deploy = aws cloudformation deploy \
+    --template-file dist/cwLogGroup.yml \
+    --stack-name $(SERVICE) \
+    --region $(AWS_REGION) \
+    --parameter-overrides \
+        Environment=$(ENVIRONMENT) \
+        Service=$(SERVICE) \
+    --tags $(TAGS) \
+    --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
+    --no-fail-on-empty-changeset
+
+test:
+	@echo "installing npm packages"
+	npm install --unsafe-perm
+	npm test
+	rm -rf node_modules
+
+deploy-dev:
+	$(call test)
+	mkdir -p dist
+	$(call package)
+	$(call deploy)
+
+deploy-test:
+	$(call test)
+	mkdir -p dist
+	$(call package)
+	$(call deploy)
+
+deploy-prod:
+	$(call test)
+	mkdir -p dist
+	$(call package)
+	$(call deploy)

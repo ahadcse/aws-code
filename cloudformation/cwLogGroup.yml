@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Custom resource for log group
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+
+  LambdaCustomResourceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: 2012-10-17
+      RoleName: LambdaCustomResource
+      Policies:
+        - PolicyName: LambdaCustomResourcePolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                    - logs:*
+                Resource: arn:aws:logs:*:*:*
+
+  LogGroupFunction:
+    Properties:
+      Role: !GetAtt LambdaCustomResourceRole.Arn
+      CodeUri: ../lambda/logGroupCreator
+      FunctionName: logGroupCreator
+      Handler: index.handler
+      MemorySize: 128
+      Runtime: nodejs8.10
+      Timeout: 120
+    Type: AWS::Serverless::Function
