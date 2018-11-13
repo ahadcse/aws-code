@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Example of creating api gateway using cloudformation
+
+Parameters:
+  Service:
+    Type: String
+  Environment:
+    Type: String
+  Swagger:
+    Type: String
+
+Mappings:
+  dev:
+    api:
+      external: dev-api.customdomain.com
+      internal: dev-api-internal.customdomain.com
+      path: /path
+  test:
+    api:
+      external: test-api.customdomain.com
+      internal: test-api-internal.customdomain.com
+      path: /path
+  prod:
+    api:
+      external: api.customdomain.com
+      internal: api-internal.customdomain.com
+      path: /path
+
+Globals:
+  Function:
+    Runtime: nodejs8.10
+    Timeout: 60
+    Handler: index.handler
+    MemorySize: 128
+    Environment:
+      Variables:
+        ENVIRONMENT: !Ref Environment
+        S3_BUCKET:
+          Fn::ImportValue: !Sub SampleS3Bucket # Example of using s3 bucket that was created in s3Bucket.yaml
+  Api:
+    MethodSettings:
+      [
+        {
+          'LoggingLevel': 'INFO',
+          'MetricsEnabled': True,
+          'DataTraceEnabled': True,
+          'ResourcePath': '/*',
+          'HttpMethod': '*',
+        },
+      ]
+
+Resources:
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Environment
+      Cors: "'*'"
+      DefinitionBody:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: !Ref Swagger
+
+  BasePathMap:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      BasePath: testapi
+      DomainName: !FindInMap [!Ref Environment, api, external]
+      RestApiId: !Ref ApiGateway
+      Stage: !Ref ApiGateway.Stage

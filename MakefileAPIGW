@@ -1,0 +1,55 @@
+ENVIRONMENT ?= dev
+SERVICE ?= apigw
+AWS_REGION ?= eu-west-1
+
+BUCKET_NAME = artifactory-$(ENVIRONMENT)
+BUCKET_PREFIX = $(SERVICE)
+SWAGGER_PATH = s3://$(BUCKET_NAME)/$(BUCKET_PREFIX)/apigw/TestApi/swagger.yaml
+
+.PHONY: deploy-apigw
+deploy-apigw:
+	aws s3 cp apigw/TestApi/swagger.yaml $(SWAGGER_PATH)
+	make install
+	$(call cfn-deploy,apigw)
+
+cfn-package = mkdir -p cloudformation/dist && \
+	aws cloudformation package \
+	--template-file cloudformation/{1}.yaml \
+	--output-template-file cloudformation/dist/{1}.yaml \
+	--s3-bucket $(BUCKET_NAME) \
+	--s3-prefix $(SERVICE)
+
+cfn-deploy = $(call cfn-package, ${1}) && \
+	aws cloudformation deploy \
+	--template-file cloudformation/dist/${1}.yaml \
+	--stack-name $(SERVICE)-${1} \
+	--capabilities CAPABILITY_NAMED_IAM \
+	--region $(AWS_REGION) \
+	--no-fail-on-empty-changeset \
+	--parameter-overrides \
+		Service=$(SERVICE) \
+		Environment=$(ENVIRONMENT) \
+		Swagger=$(SWAGGER_PATH)
+
+install:
+	npm install
+	for f in lambda/*; do \
+		([ -d $$f ] && cd "$$f" && npm install) \
+  done;
+
+prune:
+	npm prune --production
+	for f in lambda/*; do \
+		([ -d $$f ] && cd "$$f" && npm prune --production) \
+  done;
+
+test:
+	npm t
+
+test-unit:
+	npm t -- --silent
+
+test-coverage:
+	npm t -- --silent --ci --coverage
+
+ci: install test-coverage prune
