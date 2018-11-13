@@ -1,9 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Custom resource for log group
+Description: Example of creating log group and subscription filter from cloudformation and also using lambda
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
 
+# Role that allows the lambda to create a log group
   LambdaCustomResourceRole:
     Type: AWS::IAM::Role
     Properties:
@@ -27,7 +28,9 @@ Resources:
                     - logs:*
                 Resource: arn:aws:logs:*:*:*
 
+# Creating log group using AWS Lambda
   LogGroupFunction:
+    Type: AWS::Serverless::Function
     Properties:
       Role: !GetAtt LambdaCustomResourceRole.Arn
       CodeUri: ../lambda/logGroupCreator
@@ -36,4 +39,20 @@ Resources:
       MemorySize: 128
       Runtime: nodejs8.10
       Timeout: 120
-    Type: AWS::Serverless::Function
+
+
+# Creating log group and  from Cloudformation
+  SampleLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/log-group-name
+
+# Creating subscription filter from Cloudformation
+  SampleSubscriptionFilter:
+    Type: AWS::Logs::SubscriptionFilter
+    DependsOn:
+      - SampleLogGroup
+    Properties:
+      DestinationArn: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:destination:destination_name
+      FilterPattern: '[time, uuid, app=destination*, data]'
+      LogGroupName: !Sub /aws/lambda/log-group-name
