@@ -31,6 +31,9 @@ cfn-deploy = $(call cfn-package, ${1}) && \
 		Environment=$(ENVIRONMENT) \
 		Swagger=$(SWAGGER_PATH)
 
+ssm:
+    node lambda/ssm/deploySSM.js
+
 install:
 	npm install
 	for f in lambda/*; do \

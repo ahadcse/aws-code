@@ -1,0 +1,23 @@
+[
+  {
+    "Overwrite": false,
+    "Name": "/data/key/key1",
+    "Type": "SecureString",
+    "Value": "Enter value manually",
+    "Description": "Test key 1"
+  },
+  {
+    "Overwrite": false,
+    "Name": "/data/key/key2",
+    "Type": "SecureString",
+    "Value": "Enter value manually",
+    "Description": "Test key 2"
+  },
+  {
+    "Overwrite": false,
+    "Name": "/data/key/key3 ",
+    "Type": "SecureString",
+    "Value": "Enter value manually",
+    "Description": "Test key 3"
+  }
+]
