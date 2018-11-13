@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: S3 bucket stack example
+
+Parameters:
+  Service:
+    Type: String
+  Environment:
+    Type: String
+
+Resources:
+  SampleS3Bucket:
+     Type: AWS::S3::Bucket
+     Properties:
+      BucketName: !Sub ${Service}-s3bucket-${Environment}
+
+Outputs:
+  SampleS3BucketName:
+    Description: Sample S3 bucket Name
+    Value: !Ref SampleS3Bucket
+    Export:
+      Name: !Sub SampleS3Bucket
+  SampleS3BucketBucketArn:
+    Description: RMA Order filter bucket Arn
+    Value: !GetAtt SampleS3Bucket.Arn
+    Export:
+      Name: !Sub SampleS3BucketArn
