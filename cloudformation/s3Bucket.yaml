@@ -20,7 +20,7 @@ Outputs:
     Export:
       Name: !Sub SampleS3Bucket
   SampleS3BucketBucketArn:
-    Description: RMA Order filter bucket Arn
+    Description: Sample S3 bucket Arn
     Value: !GetAtt SampleS3Bucket.Arn
     Export:
       Name: !Sub SampleS3BucketArn
